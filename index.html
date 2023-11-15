@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSE Example</title>
+</head>
+<body>
+    <h1>SSE Example</h1>
+    <div id="sse-messages"></div>
+    <input type="text" id="query">
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+
+    <script>
+        let eventSource;
+        
+        document.getElementById('start').addEventListener('click', ()=>{
+            console.log("Started")
+            query = document.getElementById('query').value
+            eventSource = new EventSource(`http://127.0.0.1:8051?test=${query}`);
+
+            eventSource.onmessage = (event) => {
+                const messagesDiv = document.getElementById("sse-messages");
+                console.log("data", event.data)
+                messagesDiv.innerHTML += `<p>${event.data}</p>`;
+
+                if (event.data === 'Both'){
+                    console.log("Stooped")
+                    eventSource.close()
+                }
+            };
+
+        })
+        document.getElementById('stop').addEventListener('click', ()=>{
+            console.log("Stooped")
+            eventSource.close()
+        });
+
+
+
+    </script>
+</body>
+</html>
