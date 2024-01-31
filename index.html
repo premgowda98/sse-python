@@ -18,14 +18,14 @@
         document.getElementById('start').addEventListener('click', ()=>{
             console.log("Started")
             query = document.getElementById('query').value
-            eventSource = new EventSource(`http://127.0.0.1:8051?test=${query}`);
+            eventSource = new EventSource(`http://127.0.0.1:5689?user_id=${query}`);
 
             eventSource.onmessage = (event) => {
                 const messagesDiv = document.getElementById("sse-messages");
-                console.log("data", event.data)
-                messagesDiv.innerHTML += `<p>${event.data}</p>`;
+                messagesDiv.innerHTML += `<p>${query, event.data}</p>`;
 
-                if (event.data === 'Both'){
+
+                if (event.data === 'Both' || event.data === 'close'){
                     console.log("Stooped")
                     eventSource.close()
                 }
